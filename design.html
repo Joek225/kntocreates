@@ -6,7 +6,7 @@
   <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     { "imports": {
@@ -14,13 +14,13 @@
       "three/addons/": "./vendor/three/addons/"
     } }
   </script>
-  <title>Design | Joey</title>
-  <meta name="description" content="CAD designs explained and fabricated with 3D printing and laser cutting. Every Fusion file is free to download." />
+  <title>Design | knto.creates</title>
+  <meta name="description" content="Free Fusion 360 designs, explained and fabricated with 3D printing and laser cutting." />
 </head>
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="index.html">Joey<span class="mono">/ makes things</span></a>
+      <a class="logo" href="index.html">knto<span class="dot">.</span>creates</a>
       <nav class="nav-links" aria-label="Main">
         <a href="index.html#designs">Designs</a>
         <a href="about.html">About me</a>
@@ -30,7 +30,7 @@
   <main class="wrap">
     <div class="detail">
       <div class="viewer-wrap" data-enter style="--i:0">
-        <div class="viewer marks" id="viewer">
+        <div class="viewer" id="viewer">
           <div class="tools">
             <button class="icon-btn" id="play" title="Play / pause animation" hidden>
               <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
@@ -40,29 +40,23 @@
             </button>
           </div>
         </div>
-        <div class="viewer-bar mono" id="viewer-bar">
-          <div class="keys">
-            <span><kbd>Shift + MMB</kbd> orbit</span>
-            <span><kbd>MMB</kbd> pan</span>
-            <span><kbd>Scroll</kbd> zoom</span>
-            <span><kbd>F6</kbd> fit</span>
-            <span class="touch"><kbd>Drag</kbd> rotate &middot; <kbd>Pinch</kbd> zoom &middot; <kbd>2 fingers</kbd> pan</span>
-          </div>
-          <span>Fusion 360 controls</span>
+        <div class="viewer-bar" id="viewer-bar">
+          <span><kbd>Shift + middle drag</kbd> orbit</span>
+          <span><kbd>Middle drag</kbd> pan</span>
+          <span><kbd>Scroll</kbd> zoom</span>
+          <span><kbd>F6</kbd> fit</span>
+          <span class="touch"><kbd>Drag</kbd> rotate · <kbd>Pinch</kbd> zoom</span>
         </div>
       </div>
       <article class="info" id="info">
-        <a class="crumb mono" href="index.html#designs"><span>&larr;</span> All designs</a>
+        <a class="crumb" href="index.html#designs"><span>&larr;</span> All designs</a>
       </article>
     </div>
   </main>
   <footer>
-    <div class="wrap mono">
-      <div class="cell"><span>Drawn by</span>Joey</div>
-      <div class="cell"><span>License</span>Free to use</div>
-      <div class="cell"><span>Units</span>mm</div>
-      <div class="cell"><span>Rev</span>A &middot; 2026</div>
-      <div class="cell"><span>Find me</span><a href="#" data-social="instagram">Instagram</a> &nbsp;/&nbsp; <a href="#" data-social="youtube">YouTube</a></div>
+    <div class="wrap">
+      <span>knto.creates</span>
+      <span class="links"><a href="#" data-social="instagram">Instagram</a><a href="#" data-social="youtube">YouTube</a></span>
     </div>
   </footer>
   <script type="module" src="js/site.js"></script>
@@ -74,7 +68,7 @@
     const d = DESIGNS[i];
     const info = document.getElementById("info");
     if (!d) { info.insertAdjacentHTML("beforeend", "<h1>Design not found</h1>"); throw 0; }
-    document.title = d.title + " | Joey";
+    document.title = d.title + " | knto.creates";
     const box = document.getElementById("viewer");
     box.style.viewTransitionName = "design-" + d.id;
 
@@ -84,20 +78,20 @@
       yt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3z"/></svg>',
     };
     const btn = (href, label, ic, cls = "") =>
-      '<a class="btn ' + cls + '" ' + (href ? 'href="' + href + '" target="_blank" rel="noopener"' : 'aria-disabled="true"') + ">" + ic + label + "</a>";
-    const specs = [["Part no.", "JK-" + String(i + 1).padStart(3, "0")], ["Process", d.process || "—"], ...(d.specs || [])];
+      '<a class="btn ' + cls + '" ' + (href ? 'href="' + href + '" target="_blank" rel="noopener" download' : 'aria-disabled="true"') + ">" + ic + "<span>" + label + "</span></a>";
+    const date = d.date ? new Date(d.date + "T00:00:00").toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "";
+    const files = d.downloads || [];
 
     info.insertAdjacentHTML("beforeend",
       '<h1 data-enter style="--i:1">' + d.title + "</h1>" +
-      '<p class="lede" data-enter style="--i:2">' + d.summary + "</p>" +
-      '<div class="actions" data-enter style="--i:3">' + btn(d.download, d.download ? "Download Fusion file" : "Fusion file coming soon", icon.dl, "primary") + "</div>" +
-      '<dl class="titleblock" data-enter style="--i:4">' + specs.map(([k, v]) => "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>").join("") + "</dl>" +
-      '<div class="prose" data-enter style="--i:5">' + d.body + "</div>" +
-      '<section class="watch" data-reveal><span class="mono">Watch the video</span><div class="actions">' +
+      (date ? '<time class="date" datetime="' + d.date + '" data-enter style="--i:2">' + date + "</time>" : "") +
+      '<div class="downloads" data-enter style="--i:3"><span class="label">Download</span>' +
+        (files.length ? files.map((f, n) => btn(f.url, f.label, icon.dl, n === 0 ? "primary" : "")).join("") : '<span class="soon">Files coming soon</span>') +
+      "</div>" +
+      '<div class="watch" data-enter style="--i:4"><span class="label">Watch</span><div class="actions">' +
         btn(d.instagram, "Instagram reel", icon.ig) + btn(d.youtube, "YouTube short", icon.yt) +
-      "</div>" + (!d.instagram && !d.youtube ? '<p class="note mono">Still filming this one.</p>' : "") + "</section>"
+      "</div></div>"
     );
-    import("./js/site.js").then((m) => m.reveal(info));
 
     if (d.fusionEmbed) {
       box.querySelector(".tools").remove(); document.getElementById("viewer-bar").remove();

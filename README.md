@@ -4,10 +4,10 @@ A plain HTML/CSS/JS site with no build step. Open it with any static server
 (`python3 -m http.server`) or host it on GitHub Pages.
 
 ## Add a design
-1. In Fusion: right click the body > **Save As Mesh** > STL (or export OBJ/GLB/3MF). Put it in `models/`.
-2. Open `js/designs.js` and copy the sample entry. Set `model: "models/your-file.stl"`,
-   `download` (your Fusion public share link or an .f3d in `models/`), `instagram` and `youtube`.
-3. Optional: `fusionEmbed` with a Fusion "Share > Public link > Embed" URL shows Autodesk's own viewer instead.
+1. In Fusion: right click the body > **Save As Mesh** > STL. Put it in `models/` (this is the 3D preview).
+2. Put the files people download in `models/` too (.f3d, .step, .stl), or use Fusion public share links.
+3. Open `js/designs.js`, copy the sample entry and fill in `title`, `summary`, `date`, `model`,
+   `downloads`, `instagram` and `youtube`. Newest design goes at the top.
 4. Delete the sample cycloidal drive entry whenever you want.
 
 ## Other edits

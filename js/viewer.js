@@ -3,11 +3,11 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const MATERIALS = {
-  part: () => new THREE.MeshStandardMaterial({ color: 0x3e8dbf, metalness: 0.05, roughness: 0.45 }),
+  part: () => new THREE.MeshStandardMaterial({ color: 0x1f9cf0, metalness: 0.05, roughness: 0.45 }),
   pin: () => new THREE.MeshStandardMaterial({ color: 0xd9dbe6, metalness: 0.85, roughness: 0.25 }),
-  housing: () => new THREE.MeshStandardMaterial({ color: 0x4a4e66, metalness: 0.1, roughness: 0.6 }),
-  accent: () => new THREE.MeshStandardMaterial({ color: 0x8f4656, metalness: 0.1, roughness: 0.5 }),
-  glass: () => new THREE.MeshStandardMaterial({ color: 0x8f4656, metalness: 0, roughness: 0.3, transparent: true, opacity: 0.28, depthWrite: false }),
+  housing: () => new THREE.MeshStandardMaterial({ color: 0x4b5590, metalness: 0.1, roughness: 0.6 }),
+  accent: () => new THREE.MeshStandardMaterial({ color: 0xe04b70, metalness: 0.1, roughness: 0.5 }),
+  glass: () => new THREE.MeshStandardMaterial({ color: 0xe04b70, metalness: 0, roughness: 0.3, transparent: true, opacity: 0.28, depthWrite: false }),
 };
 
 /* ---------- Sample model: a cycloidal drive, built in code ---------- */

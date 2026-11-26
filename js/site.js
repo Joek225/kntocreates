@@ -18,5 +18,12 @@ const io = new IntersectionObserver((entries) => {
 export function reveal(root = document) { root.querySelectorAll("[data-reveal]:not(.in)").forEach((el) => io.observe(el)); }
 reveal();
 
-// Dimension lines: measure each path so it draws itself
-document.querySelectorAll(".draw path, .draw line").forEach((p) => p.style.setProperty("--len", Math.ceil(p.getTotalLength())));
+// Big headings shrink to fit their column if a wide font (Avenir) would overflow it
+const fitBig = () => document.querySelectorAll(".big").forEach((h) => {
+  h.style.fontSize = "";
+  const col = h.parentElement.clientWidth;
+  const widest = Math.max(...[...h.querySelectorAll(".line-mask > span")].map((s) => s.scrollWidth));
+  if (widest > col) h.style.fontSize = parseFloat(getComputedStyle(h).fontSize) * (col / widest) * 0.97 + "px";
+});
+fitBig(); document.fonts.ready.then(fitBig);
+let ft; addEventListener("resize", () => { clearTimeout(ft); ft = setTimeout(fitBig, 120); });

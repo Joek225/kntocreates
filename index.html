@@ -6,7 +6,7 @@
   <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     { "imports": {
@@ -14,13 +14,13 @@
       "three/addons/": "./vendor/three/addons/"
     } }
   </script>
-  <title>Joey | I make things</title>
-  <meta name="description" content="CAD designs explained and fabricated with 3D printing and laser cutting. Every Fusion file is free to download." />
+  <title>knto.creates</title>
+  <meta name="description" content="Free Fusion 360 designs, explained and fabricated with 3D printing and laser cutting." />
 </head>
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="index.html">Joey<span class="mono">/ makes things</span></a>
+      <a class="logo" href="index.html">knto<span class="dot">.</span>creates</a>
       <nav class="nav-links" aria-label="Main">
         <a href="index.html#designs" aria-current="page">Designs</a>
         <a href="about.html">About me</a>
@@ -29,91 +29,38 @@
   </header>
   <main>
     <section class="hero wrap">
-      <div class="hero-text">
-        <h1>
-          <span class="line-mask"><span style="--i:0">Hi, I'm Joey.</span></span>
-          <span class="line-mask"><span style="--i:1">I make <span class="accent" id="things">things.</span></span></span>
-        </h1>
-        <svg class="dim draw" id="dim" aria-hidden="true"></svg>
-        <p class="lede" data-enter style="--i:2">I CAD everyday objects and machines, explain how they work, then 3D print or laser cut them. Every design is free to download.</p>
-        <div class="stack mono" data-enter style="--i:3"><span>Fusion 360</span><span>3D printing</span><span>Laser cutting</span><span>FEA</span></div>
-      </div>
-      <div class="hero-model" id="hero-model">
-        <span class="callout c1" data-enter style="--i:6">10 ring pins</span>
-        <span class="callout c2" data-enter style="--i:7">9 : 1 reduction</span>
-      </div>
-      <a class="scroll-cue" href="#designs" data-enter style="--i:5"><span class="bar"></span><span class="mono">Scroll for designs</span></a>
+      <h1 class="big"><span class="line-mask"><span>knto<span class="dot">.</span>creates</span></span></h1>
+      <p class="lede" data-enter style="--i:2">Free Fusion 360 designs, explained and fabricated.</p>
     </section>
 
     <section class="section wrap" id="designs">
-      <div class="section-head" data-reveal>
-        <h2>Designs</h2>
-        <span class="mono" id="count"></span>
-      </div>
-      <ol class="index" id="index"></ol>
+      <h2 data-reveal>Designs</h2>
+      <ul class="index" id="index"></ul>
     </section>
   </main>
   <footer>
-    <div class="wrap mono">
-      <div class="cell"><span>Drawn by</span>Joey</div>
-      <div class="cell"><span>License</span>Free to use</div>
-      <div class="cell"><span>Units</span>mm</div>
-      <div class="cell"><span>Rev</span>A &middot; 2026</div>
-      <div class="cell"><span>Find me</span><a href="#" data-social="instagram">Instagram</a> &nbsp;/&nbsp; <a href="#" data-social="youtube">YouTube</a></div>
+    <div class="wrap">
+      <span>knto.creates</span>
+      <span class="links"><a href="#" data-social="instagram">Instagram</a><a href="#" data-social="youtube">YouTube</a></span>
     </div>
   </footer>
   <script type="module" src="js/site.js"></script>
   <script type="module">
     import { DESIGNS } from "./js/designs.js";
-    import { renderThumb, mountHero } from "./js/viewer.js";
+    import { renderThumb } from "./js/viewer.js";
     import { reveal } from "./js/site.js";
-
-    // dimension line under "things."
-    const dim = document.getElementById("dim"), word = document.getElementById("things");
-    const drawDim = () => {
-      const w = word.getBoundingClientRect().width, x = word.getBoundingClientRect().left - dim.parentElement.getBoundingClientRect().left;
-      dim.setAttribute("viewBox", `0 0 ${dim.clientWidth} 30`);
-      dim.innerHTML = `<g stroke="#90d5ff" stroke-width="1" fill="none" opacity=".8">
-        <path d="M${x} 0 V14"/><path d="M${x + w} 0 V14"/>
-        <path d="M${x} 8 H${x + w}"/><path d="M${x + 6} 4 L${x} 8 L${x + 6} 12"/><path d="M${x + w - 6} 4 L${x + w} 8 L${x + w - 6} 12"/></g>
-        <text x="${x + w / 2}" y="27" text-anchor="middle">free to download</text>`;
-      dim.querySelectorAll("path").forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength()) + 1); p.style.setProperty("--d", 1000 + i * 90 + "ms"); });
-      requestAnimationFrame(() => dim.classList.add("labelled"));
-    };
-    // shrink the headline until its longest line fits the column, whatever font loaded (Avenir is wider than Nunito)
-    const h1 = document.querySelector(".hero h1");
-    const fit = () => {
-      h1.style.fontSize = "";
-      const col = h1.parentElement.clientWidth;
-      const widest = Math.max(...[...h1.querySelectorAll(".line-mask > span")].map((s) => s.scrollWidth));
-      if (widest > col) h1.style.fontSize = parseFloat(getComputedStyle(h1).fontSize) * (col / widest) * 0.97 + "px";
-    };
-    fit();
-    document.fonts.ready.then(() => { fit(); drawDim(); });
-    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { fit(); dim.classList.remove("draw"); drawDim(); }, 150); });
-
-    // hero model: the first design that has a model, else the sample
-    const heroDesign = DESIGNS.find((d) => d.hero) || DESIGNS[0];
-    if (heroDesign) setTimeout(() => mountHero(document.getElementById("hero-model"), heroDesign), 250);
-    else document.getElementById("hero-model").remove();
-
-    // design list
     const list = document.getElementById("index");
-    document.getElementById("count").innerHTML = "<b>" + String(DESIGNS.length).padStart(2, "0") + "</b> " + (DESIGNS.length === 1 ? "design" : "designs") + " &middot; more coming";
-    if (!DESIGNS.length) list.outerHTML = '<p class="mono empty-note">Nothing here yet. First design is on the bench.</p>';
+    if (!DESIGNS.length) list.outerHTML = '<p class="lede">Designs coming soon.</p>';
     DESIGNS.forEach((d, i) => {
       const li = document.createElement("li");
       li.className = "row"; li.dataset.reveal = ""; li.style.setProperty("--i", i % 4);
       li.innerHTML = `<a href="design.html?id=${encodeURIComponent(d.id)}">
-          <span class="num">${String(i + 1).padStart(3, "0")}</span>
           <span class="thumb"></span>
           <span><h3></h3><p></p></span>
-          <span class="kind mono"></span>
-          <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>`;
       li.querySelector("h3").textContent = d.title;
       li.querySelector("p").textContent = d.summary;
-      li.querySelector(".kind").textContent = (d.tags || []).filter((t) => t !== "Sample").join(" / ");
       list.append(li);
       const img = new Image(); img.alt = ""; img.style.viewTransitionName = "design-" + d.id;
       li.querySelector(".thumb").append(img);
