@@ -80,8 +80,17 @@
       dim.querySelectorAll("path").forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength()) + 1); p.style.setProperty("--d", 1000 + i * 90 + "ms"); });
       requestAnimationFrame(() => dim.classList.add("labelled"));
     };
-    document.fonts.ready.then(drawDim);
-    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { dim.classList.remove("draw"); drawDim(); }, 150); });
+    // shrink the headline until its longest line fits the column, whatever font loaded (Avenir is wider than Nunito)
+    const h1 = document.querySelector(".hero h1");
+    const fit = () => {
+      h1.style.fontSize = "";
+      const col = h1.parentElement.clientWidth;
+      const widest = Math.max(...[...h1.querySelectorAll(".line-mask > span")].map((s) => s.scrollWidth));
+      if (widest > col) h1.style.fontSize = parseFloat(getComputedStyle(h1).fontSize) * (col / widest) * 0.97 + "px";
+    };
+    fit();
+    document.fonts.ready.then(() => { fit(); drawDim(); });
+    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { fit(); dim.classList.remove("draw"); drawDim(); }, 150); });
 
     // hero model: the first design that has a model, else the sample
     const heroDesign = DESIGNS.find((d) => d.hero) || DESIGNS[0];
