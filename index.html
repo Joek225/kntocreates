@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     { "imports": {
@@ -19,7 +20,7 @@
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <a class="logo" href="index.html">Joey<span class="mono">/ makes things</span></a>
       <nav class="nav-links" aria-label="Main">
         <a href="index.html#designs" aria-current="page">Designs</a>
         <a href="about.html">About me</a>
@@ -28,46 +29,88 @@
   </header>
   <main>
     <section class="hero wrap">
-      <h1><span data-enter style="--i:0;display:block">Hi, I'm Joey.</span><span data-enter style="--i:1;display:block">I make <span class="accent">things.</span></span></h1>
-      <p data-enter style="--i:2">I CAD everyday objects and machines, explain how they work, then 3D print or laser cut them. Every design is free to download.</p>
-      <div class="tags" data-enter style="--i:3"><span class="tag">Fusion 360</span><span class="tag">3D printing</span><span class="tag">Laser cutting</span><span class="tag">FEA</span></div>
-      <a class="scroll-cue" href="#designs" data-enter style="--i:4">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v11M3 8.5 8 13.5l5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Scroll down to see the designs
-      </a>
+      <div class="hero-text">
+        <h1>
+          <span class="line-mask"><span style="--i:0">Hi, I'm Joey.</span></span>
+          <span class="line-mask"><span style="--i:1">I make <span class="accent" id="things">things.</span></span></span>
+        </h1>
+        <svg class="dim draw" id="dim" aria-hidden="true"></svg>
+        <p class="lede" data-enter style="--i:2">I CAD everyday objects and machines, explain how they work, then 3D print or laser cut them. Every design is free to download.</p>
+        <div class="stack mono" data-enter style="--i:3"><span>Fusion 360</span><span>3D printing</span><span>Laser cutting</span><span>FEA</span></div>
+      </div>
+      <div class="hero-model" id="hero-model">
+        <span class="callout c1" data-enter style="--i:6">10 ring pins</span>
+        <span class="callout c2" data-enter style="--i:7">9 : 1 reduction</span>
+      </div>
+      <a class="scroll-cue" href="#designs" data-enter style="--i:5"><span class="bar"></span><span class="mono">Scroll for designs</span></a>
     </section>
 
     <section class="section wrap" id="designs">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <h2>Designs</h2>
-        <p>Click any design to spin it in 3D, read how it works and grab the Fusion file.</p>
+        <span class="mono" id="count"></span>
       </div>
-      <div class="grid" id="grid"></div>
+      <ol class="index" id="index"></ol>
     </section>
   </main>
   <footer>
-    <div class="wrap">
-      <span>© 2026 Joey. All designs free to use.</span>
-      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    <div class="wrap mono">
+      <div class="cell"><span>Drawn by</span>Joey</div>
+      <div class="cell"><span>License</span>Free to use</div>
+      <div class="cell"><span>Units</span>mm</div>
+      <div class="cell"><span>Rev</span>A &middot; 2026</div>
+      <div class="cell"><span>Find me</span><a href="#" data-social="instagram">Instagram</a> &nbsp;/&nbsp; <a href="#" data-social="youtube">YouTube</a></div>
     </div>
   </footer>
   <script type="module" src="js/site.js"></script>
   <script type="module">
     import { DESIGNS } from "./js/designs.js";
-    import { renderThumb } from "./js/viewer.js";
-    const grid = document.getElementById("grid");
-    if (!DESIGNS.length) grid.outerHTML = '<div class="empty">Designs are on the way.</div>';
-    for (const d of DESIGNS) {
-      const a = document.createElement("a");
-      a.className = "card"; a.href = "design.html?id=" + encodeURIComponent(d.id);
-      a.innerHTML = '<div class="thumb"></div><div class="body"><h3></h3><div class="meta"></div></div>';
-      a.querySelector("h3").textContent = d.title;
-      a.querySelector(".meta").innerHTML = (d.tags || []).map((t) => "<span>" + t + "</span>").join('<span class="dot">•</span>');
-      grid.append(a);
-      const img = new Image(); img.alt = ""; img.loading = "lazy";
-      img.src = d.thumb || await renderThumb(d).catch(() => "");
-      a.querySelector(".thumb").append(img);
-    }
+    import { renderThumb, mountHero } from "./js/viewer.js";
+    import { reveal } from "./js/site.js";
+
+    // dimension line under "things."
+    const dim = document.getElementById("dim"), word = document.getElementById("things");
+    const drawDim = () => {
+      const w = word.getBoundingClientRect().width, x = word.getBoundingClientRect().left - dim.parentElement.getBoundingClientRect().left;
+      dim.setAttribute("viewBox", `0 0 ${dim.clientWidth} 30`);
+      dim.innerHTML = `<g stroke="#90d5ff" stroke-width="1" fill="none" opacity=".8">
+        <path d="M${x} 0 V14"/><path d="M${x + w} 0 V14"/>
+        <path d="M${x} 8 H${x + w}"/><path d="M${x + 6} 4 L${x} 8 L${x + 6} 12"/><path d="M${x + w - 6} 4 L${x + w} 8 L${x + w - 6} 12"/></g>
+        <text x="${x + w / 2}" y="27" text-anchor="middle">free to download</text>`;
+      dim.querySelectorAll("path").forEach((p, i) => { p.style.setProperty("--len", Math.ceil(p.getTotalLength()) + 1); p.style.setProperty("--d", 1000 + i * 90 + "ms"); });
+      requestAnimationFrame(() => dim.classList.add("labelled"));
+    };
+    document.fonts.ready.then(drawDim);
+    let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { dim.classList.remove("draw"); drawDim(); }, 150); });
+
+    // hero model: the first design that has a model, else the sample
+    const heroDesign = DESIGNS.find((d) => d.hero) || DESIGNS[0];
+    if (heroDesign) setTimeout(() => mountHero(document.getElementById("hero-model"), heroDesign), 250);
+    else document.getElementById("hero-model").remove();
+
+    // design list
+    const list = document.getElementById("index");
+    document.getElementById("count").innerHTML = "<b>" + String(DESIGNS.length).padStart(2, "0") + "</b> " + (DESIGNS.length === 1 ? "design" : "designs") + " &middot; more coming";
+    if (!DESIGNS.length) list.outerHTML = '<p class="mono empty-note">Nothing here yet. First design is on the bench.</p>';
+    DESIGNS.forEach((d, i) => {
+      const li = document.createElement("li");
+      li.className = "row"; li.dataset.reveal = ""; li.style.setProperty("--i", i % 4);
+      li.innerHTML = `<a href="design.html?id=${encodeURIComponent(d.id)}">
+          <span class="num">${String(i + 1).padStart(3, "0")}</span>
+          <span class="thumb"></span>
+          <span><h3></h3><p></p></span>
+          <span class="kind mono"></span>
+          <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>`;
+      li.querySelector("h3").textContent = d.title;
+      li.querySelector("p").textContent = d.summary;
+      li.querySelector(".kind").textContent = (d.tags || []).filter((t) => t !== "Sample").join(" / ");
+      list.append(li);
+      const img = new Image(); img.alt = ""; img.style.viewTransitionName = "design-" + d.id;
+      li.querySelector(".thumb").append(img);
+      (d.thumb ? Promise.resolve(d.thumb) : renderThumb(d)).then((src) => (img.src = src)).catch(() => {});
+    });
+    reveal(list);
   </script>
 </body>
 </html>

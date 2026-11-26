@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     { "imports": {
@@ -14,11 +15,12 @@
     } }
   </script>
   <title>About me | Joey</title>
+  <meta name="description" content="CAD designs explained and fabricated with 3D printing and laser cutting. Every Fusion file is free to download." />
 </head>
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <a class="logo" href="index.html">Joey<span class="mono">/ makes things</span></a>
       <nav class="nav-links" aria-label="Main">
         <a href="index.html#designs">Designs</a>
         <a href="about.html" aria-current="page">About me</a>
@@ -26,18 +28,21 @@
     </div>
   </header>
   <main class="wrap">
+    <div class="about-head">
+      <h1><span class="line-mask"><span>About me</span></span></h1>
+      <span class="mono" data-enter style="--i:2">Robotics / CAD / Fabrication</span>
+    </div>
     <section class="about">
-      <h1 data-enter style="--i:0">About me</h1>
       <!-- Swap the placeholder for a photo: put it in /images and replace the text with <img src="images/me.jpg" alt="Joey"> -->
-      <div class="photo-slot" data-enter style="--i:1">Your photo here</div>
-      <div class="textbox" data-enter style="--i:2">
+      <div class="photo-slot marks mono" data-enter style="--i:3">Your photo here</div>
+      <div class="textbox" data-enter style="--i:4">
         <p class="intro">I'm Joey. I like figuring out how things are made, then making them myself.</p>
-        <ul>
-          <li>7+ years of competitive robotics experience throughout elementary through high school</li>
-          <li>Represented Singapore at the VEX High School and Middle School World Championships</li>
-          <li>Mechanical team for Quest for Space, Singapore American School</li>
-        </ul>
-        <div class="socials">
+        <ol>
+          <li data-reveal style="--i:1"><span class="mono">01</span><span>7+ years of competitive robotics experience throughout elementary through high school</span></li>
+          <li data-reveal style="--i:2"><span class="mono">02</span><span>Represented Singapore at the VEX High School and Middle School World Championships</span></li>
+          <li data-reveal style="--i:3"><span class="mono">03</span><span>Mechanical team for Quest for Space, Singapore American School</span></li>
+        </ol>
+        <div class="socials" data-reveal style="--i:4">
           <a class="btn" href="#" data-social="instagram">Instagram</a>
           <a class="btn" href="#" data-social="youtube">YouTube</a>
         </div>
@@ -45,9 +50,12 @@
     </section>
   </main>
   <footer>
-    <div class="wrap">
-      <span>© 2026 Joey. All designs free to use.</span>
-      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    <div class="wrap mono">
+      <div class="cell"><span>Drawn by</span>Joey</div>
+      <div class="cell"><span>License</span>Free to use</div>
+      <div class="cell"><span>Units</span>mm</div>
+      <div class="cell"><span>Rev</span>A &middot; 2026</div>
+      <div class="cell"><span>Find me</span><a href="#" data-social="instagram">Instagram</a> &nbsp;/&nbsp; <a href="#" data-social="youtube">YouTube</a></div>
     </div>
   </footer>
   <script type="module" src="js/site.js"></script>

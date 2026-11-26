@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <script type="importmap">
     { "imports": {
@@ -14,11 +15,12 @@
     } }
   </script>
   <title>Design | Joey</title>
+  <meta name="description" content="CAD designs explained and fabricated with 3D printing and laser cutting. Every Fusion file is free to download." />
 </head>
 <body>
   <header class="nav">
     <div class="wrap">
-      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <a class="logo" href="index.html">Joey<span class="mono">/ makes things</span></a>
       <nav class="nav-links" aria-label="Main">
         <a href="index.html#designs">Designs</a>
         <a href="about.html">About me</a>
@@ -27,32 +29,40 @@
   </header>
   <main class="wrap">
     <div class="detail">
-      <div class="viewer" id="viewer">
-        <div class="tools">
-          <button class="icon-btn" id="play" title="Play / pause animation" hidden>
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
-          </button>
-          <button class="icon-btn" id="fit" title="Fit to view (F6)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-          </button>
+      <div class="viewer-wrap" data-enter style="--i:0">
+        <div class="viewer marks" id="viewer">
+          <div class="tools">
+            <button class="icon-btn" id="play" title="Play / pause animation" hidden>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+            </button>
+            <button class="icon-btn" id="fit" title="Fit to view (F6)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="hint">
-          <span><kbd>Shift + Middle drag</kbd> orbit</span>
-          <span><kbd>Middle drag</kbd> pan</span>
-          <span><kbd>Scroll</kbd> zoom</span>
-          <span><kbd>F6</kbd> fit</span>
-          <span class="touch"><kbd>Drag</kbd> rotate · <kbd>Pinch</kbd> zoom · <kbd>Two fingers</kbd> pan</span>
+        <div class="viewer-bar mono" id="viewer-bar">
+          <div class="keys">
+            <span><kbd>Shift + MMB</kbd> orbit</span>
+            <span><kbd>MMB</kbd> pan</span>
+            <span><kbd>Scroll</kbd> zoom</span>
+            <span><kbd>F6</kbd> fit</span>
+            <span class="touch"><kbd>Drag</kbd> rotate &middot; <kbd>Pinch</kbd> zoom &middot; <kbd>2 fingers</kbd> pan</span>
+          </div>
+          <span>Fusion 360 controls</span>
         </div>
       </div>
       <article class="info" id="info">
-        <a class="crumb" href="index.html#designs">← All designs</a>
+        <a class="crumb mono" href="index.html#designs"><span>&larr;</span> All designs</a>
       </article>
     </div>
   </main>
   <footer>
-    <div class="wrap">
-      <span>© 2026 Joey. All designs free to use.</span>
-      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    <div class="wrap mono">
+      <div class="cell"><span>Drawn by</span>Joey</div>
+      <div class="cell"><span>License</span>Free to use</div>
+      <div class="cell"><span>Units</span>mm</div>
+      <div class="cell"><span>Rev</span>A &middot; 2026</div>
+      <div class="cell"><span>Find me</span><a href="#" data-social="instagram">Instagram</a> &nbsp;/&nbsp; <a href="#" data-social="youtube">YouTube</a></div>
     </div>
   </footer>
   <script type="module" src="js/site.js"></script>
@@ -60,10 +70,13 @@
     import { DESIGNS } from "./js/designs.js";
     import { mountViewer } from "./js/viewer.js";
     const id = new URLSearchParams(location.search).get("id");
-    const d = DESIGNS.find((x) => x.id === id) || DESIGNS[0];
+    const i = Math.max(0, DESIGNS.findIndex((x) => x.id === id));
+    const d = DESIGNS[i];
     const info = document.getElementById("info");
     if (!d) { info.insertAdjacentHTML("beforeend", "<h1>Design not found</h1>"); throw 0; }
     document.title = d.title + " | Joey";
+    const box = document.getElementById("viewer");
+    box.style.viewTransitionName = "design-" + d.id;
 
     const icon = {
       dl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
@@ -72,21 +85,22 @@
     };
     const btn = (href, label, ic, cls = "") =>
       '<a class="btn ' + cls + '" ' + (href ? 'href="' + href + '" target="_blank" rel="noopener"' : 'aria-disabled="true"') + ">" + ic + label + "</a>";
+    const specs = [["Part no.", "JK-" + String(i + 1).padStart(3, "0")], ["Process", d.process || "—"], ...(d.specs || [])];
 
     info.insertAdjacentHTML("beforeend",
-      "<h1>" + d.title + "</h1>" +
-      '<p class="lede">' + d.summary + "</p>" +
-      '<div class="actions">' + btn(d.download, d.download ? "Download Fusion file" : "Fusion file coming soon", icon.dl, "primary") + "</div>" +
-      (d.specs?.length ? '<dl class="specs">' + d.specs.map(([k, v]) => "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>").join("") + "</dl>" : "") +
-      '<div class="prose">' + d.body + "</div>" +
-      '<section class="watch"><h2>Watch the video</h2><div class="actions">' +
+      '<h1 data-enter style="--i:1">' + d.title + "</h1>" +
+      '<p class="lede" data-enter style="--i:2">' + d.summary + "</p>" +
+      '<div class="actions" data-enter style="--i:3">' + btn(d.download, d.download ? "Download Fusion file" : "Fusion file coming soon", icon.dl, "primary") + "</div>" +
+      '<dl class="titleblock" data-enter style="--i:4">' + specs.map(([k, v]) => "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>").join("") + "</dl>" +
+      '<div class="prose" data-enter style="--i:5">' + d.body + "</div>" +
+      '<section class="watch" data-reveal><span class="mono">Watch the video</span><div class="actions">' +
         btn(d.instagram, "Instagram reel", icon.ig) + btn(d.youtube, "YouTube short", icon.yt) +
-      "</div>" + (!d.instagram && !d.youtube ? '<p class="note">Videos for this one are still being filmed.</p>' : "") + "</section>"
+      "</div>" + (!d.instagram && !d.youtube ? '<p class="note mono">Still filming this one.</p>' : "") + "</section>"
     );
+    import("./js/site.js").then((m) => m.reveal(info));
 
-    const box = document.getElementById("viewer");
     if (d.fusionEmbed) {
-      box.querySelector(".hint").remove(); box.querySelector(".tools").remove();
+      box.querySelector(".tools").remove(); document.getElementById("viewer-bar").remove();
       box.insertAdjacentHTML("afterbegin", '<iframe src="' + d.fusionEmbed + '" allowfullscreen title="' + d.title + ' in Autodesk viewer"></iframe>');
     } else {
       const v = await mountViewer(box, d);

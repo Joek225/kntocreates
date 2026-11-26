@@ -191,3 +191,42 @@ export async function renderThumb(design, w = 640, h = 480) {
   thumbRenderer.render(scene, camera);
   return thumbRenderer.domElement.toDataURL("image/png");
 }
+
+/* ---------- Hero model: runs by itself, leans toward the cursor ---------- */
+export async function mountHero(container, design) {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  container.prepend(renderer.domElement);
+  const scene = makeScene(renderer);
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 5000);
+  const { object, update } = await buildObject(design);
+  const pivot = new THREE.Group(); pivot.add(object); scene.add(pivot);
+  const resize = () => { const s = container.clientWidth; renderer.setSize(s, s, false); camera.aspect = 1; camera.updateProjectionMatrix(); };
+  new ResizeObserver(resize).observe(container); resize();
+  frame(camera, pivot, null, 0.82);
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const mouse = { x: 0, y: 0 }, lean = { x: 0, y: 0 };
+  addEventListener("pointermove", (e) => { mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5; }, { passive: true });
+  let visible = true;
+  new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(container);
+
+  let last = performance.now(), spin = 0, intro = 0;
+  renderer.setAnimationLoop((now) => {
+    const dt = Math.min((now - last) / 1000, 0.05); last = now;
+    if (!visible) return;
+    if (!reduce) {
+      intro = Math.min(intro + dt / 1.6, 1);
+      const ease = 1 - Math.pow(1 - intro, 4);
+      spin += dt * 0.12;
+      lean.x += (mouse.x - lean.x) * 0.05; lean.y += (mouse.y - lean.y) * 0.05;
+      pivot.rotation.y = spin + lean.x * 0.5 + (1 - ease) * -1.2;
+      pivot.rotation.x = lean.y * 0.25;
+      pivot.position.y = (1 - ease) * -12;
+      if (update) update(dt * 0.6);
+    }
+    renderer.render(scene, camera);
+  });
+  container.classList.add("ready");
+}
