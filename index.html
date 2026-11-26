@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    } }
+  </script>
+  <title>Joey | I make things</title>
+  <meta name="description" content="CAD designs explained and fabricated with 3D printing and laser cutting. Every Fusion file is free to download." />
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html#designs" aria-current="page">Designs</a>
+        <a href="about.html">About me</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero wrap">
+      <h1><span data-enter style="--i:0;display:block">Hi, I'm Joey.</span><span data-enter style="--i:1;display:block">I make <span class="accent">things.</span></span></h1>
+      <p data-enter style="--i:2">I CAD everyday objects and machines, explain how they work, then 3D print or laser cut them. Every design is free to download.</p>
+      <div class="tags" data-enter style="--i:3"><span class="tag">Fusion 360</span><span class="tag">3D printing</span><span class="tag">Laser cutting</span><span class="tag">FEA</span></div>
+      <a class="scroll-cue" href="#designs" data-enter style="--i:4">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v11M3 8.5 8 13.5l5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Scroll down to see the designs
+      </a>
+    </section>
+
+    <section class="section wrap" id="designs">
+      <div class="section-head">
+        <h2>Designs</h2>
+        <p>Click any design to spin it in 3D, read how it works and grab the Fusion file.</p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Joey. All designs free to use.</span>
+      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    </div>
+  </footer>
+  <script type="module" src="js/site.js"></script>
+  <script type="module">
+    import { DESIGNS } from "./js/designs.js";
+    import { renderThumb } from "./js/viewer.js";
+    const grid = document.getElementById("grid");
+    if (!DESIGNS.length) grid.outerHTML = '<div class="empty">Designs are on the way.</div>';
+    for (const d of DESIGNS) {
+      const a = document.createElement("a");
+      a.className = "card"; a.href = "design.html?id=" + encodeURIComponent(d.id);
+      a.innerHTML = '<div class="thumb"></div><div class="body"><h3></h3><div class="meta"></div></div>';
+      a.querySelector("h3").textContent = d.title;
+      a.querySelector(".meta").innerHTML = (d.tags || []).map((t) => "<span>" + t + "</span>").join('<span class="dot">•</span>');
+      grid.append(a);
+      const img = new Image(); img.alt = ""; img.loading = "lazy";
+      img.src = d.thumb || await renderThumb(d).catch(() => "");
+      a.querySelector(".thumb").append(img);
+    }
+  </script>
+</body>
+</html>

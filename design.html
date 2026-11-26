@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    } }
+  </script>
+  <title>Design | Joey</title>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html#designs">Designs</a>
+        <a href="about.html">About me</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <div class="detail">
+      <div class="viewer" id="viewer">
+        <div class="tools">
+          <button class="icon-btn" id="play" title="Play / pause animation" hidden>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+          </button>
+          <button class="icon-btn" id="fit" title="Fit to view (F6)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
+        </div>
+        <div class="hint">
+          <span><kbd>Shift + Middle drag</kbd> orbit</span>
+          <span><kbd>Middle drag</kbd> pan</span>
+          <span><kbd>Scroll</kbd> zoom</span>
+          <span><kbd>F6</kbd> fit</span>
+          <span class="touch"><kbd>Drag</kbd> rotate · <kbd>Pinch</kbd> zoom · <kbd>Two fingers</kbd> pan</span>
+        </div>
+      </div>
+      <article class="info" id="info">
+        <a class="crumb" href="index.html#designs">← All designs</a>
+      </article>
+    </div>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Joey. All designs free to use.</span>
+      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    </div>
+  </footer>
+  <script type="module" src="js/site.js"></script>
+  <script type="module">
+    import { DESIGNS } from "./js/designs.js";
+    import { mountViewer } from "./js/viewer.js";
+    const id = new URLSearchParams(location.search).get("id");
+    const d = DESIGNS.find((x) => x.id === id) || DESIGNS[0];
+    const info = document.getElementById("info");
+    if (!d) { info.insertAdjacentHTML("beforeend", "<h1>Design not found</h1>"); throw 0; }
+    document.title = d.title + " | Joey";
+
+    const icon = {
+      dl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+      ig: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
+      yt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3z"/></svg>',
+    };
+    const btn = (href, label, ic, cls = "") =>
+      '<a class="btn ' + cls + '" ' + (href ? 'href="' + href + '" target="_blank" rel="noopener"' : 'aria-disabled="true"') + ">" + ic + label + "</a>";
+
+    info.insertAdjacentHTML("beforeend",
+      "<h1>" + d.title + "</h1>" +
+      '<p class="lede">' + d.summary + "</p>" +
+      '<div class="actions">' + btn(d.download, d.download ? "Download Fusion file" : "Fusion file coming soon", icon.dl, "primary") + "</div>" +
+      (d.specs?.length ? '<dl class="specs">' + d.specs.map(([k, v]) => "<div><dt>" + k + "</dt><dd>" + v + "</dd></div>").join("") + "</dl>" : "") +
+      '<div class="prose">' + d.body + "</div>" +
+      '<section class="watch"><h2>Watch the video</h2><div class="actions">' +
+        btn(d.instagram, "Instagram reel", icon.ig) + btn(d.youtube, "YouTube short", icon.yt) +
+      "</div>" + (!d.instagram && !d.youtube ? '<p class="note">Videos for this one are still being filmed.</p>' : "") + "</section>"
+    );
+
+    const box = document.getElementById("viewer");
+    if (d.fusionEmbed) {
+      box.querySelector(".hint").remove(); box.querySelector(".tools").remove();
+      box.insertAdjacentHTML("afterbegin", '<iframe src="' + d.fusionEmbed + '" allowfullscreen title="' + d.title + ' in Autodesk viewer"></iframe>');
+    } else {
+      const v = await mountViewer(box, d);
+      document.getElementById("fit").onclick = v.fit;
+      if (v.canAnimate) {
+        const p = document.getElementById("play"); p.hidden = false;
+        const play = p.innerHTML, pause = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/></svg>';
+        p.onclick = () => { p.innerHTML = v.toggle() ? pause : play; };
+      }
+    }
+  </script>
+</body>
+</html>

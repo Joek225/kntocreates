@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+    { "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/addons/"
+    } }
+  </script>
+  <title>About me | Joey</title>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap">
+      <a class="logo" href="index.html">Joey<span>.</span></a>
+      <nav class="nav-links" aria-label="Main">
+        <a href="index.html#designs">Designs</a>
+        <a href="about.html" aria-current="page">About me</a>
+      </nav>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="about">
+      <h1 data-enter style="--i:0">About me</h1>
+      <!-- Swap the placeholder for a photo: put it in /images and replace the text with <img src="images/me.jpg" alt="Joey"> -->
+      <div class="photo-slot" data-enter style="--i:1">Your photo here</div>
+      <div class="textbox" data-enter style="--i:2">
+        <p class="intro">I'm Joey. I like figuring out how things are made, then making them myself.</p>
+        <ul>
+          <li>7+ years of competitive robotics experience throughout elementary through high school</li>
+          <li>Represented Singapore at the VEX High School and Middle School World Championships</li>
+          <li>Mechanical team for Quest for Space, Singapore American School</li>
+        </ul>
+        <div class="socials">
+          <a class="btn" href="#" data-social="instagram">Instagram</a>
+          <a class="btn" href="#" data-social="youtube">YouTube</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Joey. All designs free to use.</span>
+      <span><a href="#" data-social="instagram">Instagram</a> · <a href="#" data-social="youtube">YouTube</a></span>
+    </div>
+  </footer>
+  <script type="module" src="js/site.js"></script>
+</body>
+</html>
