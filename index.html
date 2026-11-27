@@ -29,13 +29,13 @@
   </header>
   <main>
     <section class="hero wrap">
-      <h1 class="big" data-float="-0.25" data-fade><span class="line-mask"><span>knto<span class="dot">.</span>creates</span></span></h1>
-      <div data-float="-0.12" data-fade><p class="lede" data-enter style="--i:2">Free Fusion 360 designs, explained and fabricated.</p></div>
+      <h1 class="big" data-fade><span class="line-mask"><span>knto<span class="dot">.</span>creates</span></span></h1>
+      <div data-fade><p class="lede" data-enter style="--i:2">Free Fusion 360 designs, explained and fabricated.</p></div>
     </section>
 
     <section class="section wrap" id="designs">
       <h2 data-reveal data-float="0.05">Designs</h2>
-      <ul class="index" id="index"></ul>
+      <div class="cards" id="cards"></div>
     </section>
   </main>
   <footer>
@@ -49,21 +49,41 @@
     import { DESIGNS } from "./js/designs.js?v=__V__";
     import { renderThumb } from "./js/viewer.js?v=__V__";
     import { reveal } from "./js/site.js?v=__V__";
-    const list = document.getElementById("index");
+    const list = document.getElementById("cards");
+    const icon = {
+      dl: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>',
+      out: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>',
+    };
+    const fmt = (s) => s ? new Date(s + "T00:00:00").toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "";
     if (!DESIGNS.length) list.outerHTML = '<p class="lede">Designs coming soon.</p>';
-    DESIGNS.forEach((d, i) => {
-      const li = document.createElement("li");
-      li.className = "row"; li.dataset.reveal = ""; li.dataset.float = (0.03 + (i % 3) * 0.02).toFixed(2); li.style.setProperty("--i", i % 4);
-      li.innerHTML = `<a href="design.html?id=${encodeURIComponent(d.id)}">
-          <span class="thumb"></span>
-          <span><h3></h3><p></p></span>
-          <svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>`;
-      li.querySelector("h3").textContent = d.title;
-      li.querySelector("p").textContent = d.summary;
-      list.append(li);
+    DESIGNS.forEach((d, n) => {
+      const url = "design.html?id=" + encodeURIComponent(d.id);
+      const files = (d.downloads || []).map((f) => f.label.replace(/ \(.*\)/, "").replace("Fusion 360", "F3D")).join(" · ") || "Coming soon";
+      const firstFile = (d.downloads || []).find((f) => f.url);
+      const video = [d.instagram && "Reel", d.youtube && "Short"].filter(Boolean).join(" · ") || "Coming soon";
+      const card = document.createElement("article");
+      card.className = "card"; card.dataset.reveal = ""; card.dataset.float = "0.04"; card.style.setProperty("--i", n % 4);
+      card.innerHTML = `
+        <header class="card-top">
+          <h3><a href="${url}"></a></h3>
+          <a class="card-dl" href="${firstFile ? firstFile.url : url}" ${firstFile ? "download" : ""} aria-label="Download">${icon.dl}</a>
+        </header>
+        <div class="card-band"><span>Design ${String(n + 1).padStart(2, "0")}</span><time datetime="${d.date || ""}">${fmt(d.date)}</time></div>
+        <a class="card-preview" href="${url}" tabindex="-1" aria-hidden="true"><span class="thumb"></span></a>
+        <p class="card-sum"></p>
+        <dl class="card-rows">
+          <div><dt>Files</dt><dd>${files}</dd></div>
+          <div><dt>Video</dt><dd>${video}</dd></div>
+        </dl>
+        <div class="card-actions">
+          <a class="pill solid" href="${url}">View design</a>
+          ${d.instagram ? `<a class="pill" href="${d.instagram}" target="_blank" rel="noopener">Watch the reel ${icon.out}</a>` : `<a class="pill" href="${url}">Spin it in 3D ${icon.out}</a>`}
+        </div>`;
+      card.querySelector("h3 a").textContent = d.title;
+      card.querySelector(".card-sum").textContent = d.summary;
+      list.append(card);
       const img = new Image(); img.alt = ""; img.style.viewTransitionName = "design-" + d.id;
-      li.querySelector(".thumb").append(img);
+      card.querySelector(".thumb").append(img);
       (d.thumb ? Promise.resolve(d.thumb) : renderThumb(d)).then((src) => (img.src = src)).catch(() => {});
     });
     reveal(list);
