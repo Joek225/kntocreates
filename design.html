@@ -85,13 +85,14 @@
     info.insertAdjacentHTML("beforeend",
       '<h1 data-enter style="--i:1">' + d.title + "</h1>" +
       (date ? '<time class="date" datetime="' + d.date + '" data-enter style="--i:2">' + date + "</time>" : "") +
-      '<div class="downloads" data-enter style="--i:3"><span class="label">Download</span>' +
+      '<div class="downloads" data-enter data-float="0.04" style="--i:3"><span class="label">Download</span>' +
         (files.length ? files.map((f, n) => btn(f.url, f.label, icon.dl, n === 0 ? "primary" : "")).join("") : '<span class="soon">Files coming soon</span>') +
       "</div>" +
-      '<div class="watch" data-enter style="--i:4"><span class="label">Watch</span><div class="actions">' +
+      '<div class="watch" data-enter data-float="0.08" style="--i:4"><span class="label">Watch</span><div class="actions">' +
         btn(d.instagram, "Instagram reel", icon.ig) + btn(d.youtube, "YouTube short", icon.yt) +
       "</div></div>"
     );
+    import("./js/site.js").then((m) => m.reveal(info));
 
     if (d.fusionEmbed) {
       box.querySelector(".tools").remove(); document.getElementById("viewer-bar").remove();

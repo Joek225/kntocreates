@@ -29,12 +29,12 @@
   </header>
   <main>
     <section class="hero wrap">
-      <h1 class="big"><span class="line-mask"><span>knto<span class="dot">.</span>creates</span></span></h1>
-      <p class="lede" data-enter style="--i:2">Free Fusion 360 designs, explained and fabricated.</p>
+      <h1 class="big" data-float="-0.25" data-fade><span class="line-mask"><span>knto<span class="dot">.</span>creates</span></span></h1>
+      <div data-float="-0.12" data-fade><p class="lede" data-enter style="--i:2">Free Fusion 360 designs, explained and fabricated.</p></div>
     </section>
 
     <section class="section wrap" id="designs">
-      <h2 data-reveal>Designs</h2>
+      <h2 data-reveal data-float="0.05">Designs</h2>
       <ul class="index" id="index"></ul>
     </section>
   </main>
@@ -53,7 +53,7 @@
     if (!DESIGNS.length) list.outerHTML = '<p class="lede">Designs coming soon.</p>';
     DESIGNS.forEach((d, i) => {
       const li = document.createElement("li");
-      li.className = "row"; li.dataset.reveal = ""; li.style.setProperty("--i", i % 4);
+      li.className = "row"; li.dataset.reveal = ""; li.dataset.float = (0.03 + (i % 3) * 0.02).toFixed(2); li.style.setProperty("--i", i % 4);
       li.innerHTML = `<a href="design.html?id=${encodeURIComponent(d.id)}">
           <span class="thumb"></span>
           <span><h3></h3><p></p></span>

@@ -1,3 +1,5 @@
+import "./sky.js";
+import { track } from "./motion.js";
 // Your channel links: paste them here and every Instagram / YouTube link on the site updates.
 const SOCIAL = {
   instagram: "https://instagram.com/",
@@ -15,7 +17,7 @@ addEventListener("scroll", onScroll, { passive: true }); onScroll();
 const io = new IntersectionObserver((entries) => {
   for (const e of entries) if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
 }, { rootMargin: "0px 0px -8% 0px" });
-export function reveal(root = document) { root.querySelectorAll("[data-reveal]:not(.in)").forEach((el) => io.observe(el)); }
+export function reveal(root = document) { root.querySelectorAll("[data-reveal]:not(.in)").forEach((el) => io.observe(el)); track(root); }
 reveal();
 
 // Big headings shrink to fit their column if a wide font (Avenir) would overflow it
