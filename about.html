@@ -47,10 +47,13 @@
 
     <section class="vex wrap" id="vex">
       <h2 data-reveal data-float="0.04">VEX Robotics <span class="team">&mdash; 6546C</span></h2>
+      <a class="insta" href="https://www.instagram.com/65.46c/" target="_blank" rel="noopener" data-reveal>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        Support us on Instagram!
+      </a>
 
       <figure class="vex-photo" id="vex-photo">
         <img src="images/vex-worlds-2025.jpg" width="1642" height="1236" loading="lazy" alt="Team Singapore walking on stage at the VEX Robotics World Championship 2025" />
-        <span class="target" style="--x:72.4%; --y:86%"></span>
         <p class="thats-me" id="thats-me" style="--x:50%; --y:52%">That's me!</p>
         <svg class="pointer" id="pointer" aria-hidden="true"><path id="pointer-path" /><path id="pointer-head" /></svg>
       </figure>
@@ -94,7 +97,7 @@
     function drawArrow() {
       const W = photo.clientWidth, H = photo.clientHeight;
       svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-      const tx = W * 0.724, ty = H * 0.86, r = Math.max(14, W * 0.014);
+      const tx = W * 0.724, ty = H * 0.845, r = Math.max(8, W * 0.008);
       const sx = label.offsetLeft + label.offsetWidth * 0.62, sy = label.offsetTop + label.offsetHeight + 6;
       const ex = tx - r * 0.5, ey = ty - r - 6;
       const cx = sx - W * 0.04, cy = (sy + ey) / 2 + H * 0.02;
