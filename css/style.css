@@ -91,7 +91,8 @@ button { font: inherit; cursor: pointer; }
 .btn:active { transform: scale(0.97); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn.primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
-.btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+.btn[aria-disabled="true"] { pointer-events: none; color: #7d84a8; background: #1b1e3d; border-color: #2a2f55; }
+.btn.primary[aria-disabled="true"] { background: #173f6b; border-color: #173f6b; color: #8fb6dc; }
 .btn svg { width: 18px; height: 18px; flex: none; }
 
 /* ---- Design detail ---- */
