@@ -225,10 +225,6 @@ footer .links { display: flex; gap: 20px; }
 .cad-video { position: relative; }
 .cad-video video, .cad-still img { display: block; width: 100%; height: auto; }
 .cad-video video { cursor: pointer; }
-.replay { position: absolute; right: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 0; background: rgba(18, 20, 44, 0.78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #fff; font-weight: 600; font-size: 14px; transition: transform 160ms var(--ease-out), background-color 160ms ease; animation: enter 400ms var(--ease-out); }
-.replay:hover { background: rgba(18, 20, 44, 0.92); }
-.replay:active { transform: scale(0.96); }
-.replay[hidden] { display: none; }
 @media (max-width: 900px) {
   .story { margin: 72px 0 36px; }
   .duo, .cad-grid { grid-template-columns: 1fr; gap: 16px; }
