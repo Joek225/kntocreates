@@ -34,9 +34,10 @@
       </figure>
       <div class="about-hero-text" data-float="-0.08" data-fade>
         <h1 class="big">
-          <span class="line-mask"><span style="--i:0">Hi, I'm Joey.</span></span>
+          <span class="line-mask"><span style="--i:0">Hi, I'm Joey Krisnanto.</span></span>
           <span class="line-mask"><span style="--i:1">I make <span class="accent">things.</span></span></span>
         </h1>
+        <p class="bio" data-enter style="--i:3">I'm a junior at Singapore American School with a strong passion for engineering and robotics. I love to learn how things work!</p>
         <a class="scroll-more" href="#vex" data-enter style="--i:4">
           Scroll down to learn more about me
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
@@ -45,25 +46,38 @@
     </section>
 
     <section class="vex wrap" id="vex">
-      <h2 data-reveal data-float="0.04">VEX Robotics</h2>
-      <div class="vex-grid" id="vex-grid">
-        <figure class="vex-photo">
-          <img src="images/vex-worlds-2025.jpg" width="1642" height="1236" loading="lazy" alt="Team Singapore walking on stage at the VEX Robotics World Championship 2025" />
-          <span class="target" style="--x:72.4%; --y:86%"></span>
-        </figure>
-        <p class="thats-me" id="thats-me">That's me!</p>
+      <h2 data-reveal data-float="0.04">VEX Robotics <span class="team">&mdash; 6546C</span></h2>
+
+      <figure class="vex-photo" id="vex-photo">
+        <img src="images/vex-worlds-2025.jpg" width="1642" height="1236" loading="lazy" alt="Team Singapore walking on stage at the VEX Robotics World Championship 2025" />
+        <span class="target" style="--x:72.4%; --y:86%"></span>
+        <p class="thats-me" id="thats-me" style="--x:50%; --y:52%">That's me!</p>
         <svg class="pointer" id="pointer" aria-hidden="true"><path id="pointer-path" /><path id="pointer-head" /></svg>
+      </figure>
+
+      <p class="story" data-reveal data-float="0.05">I've represented Singapore at both the <strong>2024 VIQC Middle School World Championship</strong> and the <strong>2025 V5RC High School World Championship</strong>.</p>
+
+      <div class="duo">
+        <figure data-reveal data-float="0.04"><img src="images/team-6546c.jpg" width="1518" height="1532" loading="lazy" alt="Joey with two teammates from team 6546C at the field" /></figure>
+        <figure data-reveal data-float="0.09" style="--i:1"><img src="images/robot-6546c-formosa.jpg" width="1500" height="1000" loading="lazy" alt="Team 6546C's robot on the field at the Formosa tournament" /></figure>
       </div>
 
+      <p class="story" data-reveal data-float="0.05">Since 2024, our robotics team has competed in Taipei at Taipei American School, a special opportunity where Southeast Asian international schools compete at the invitational <strong>Formosa</strong> tournament.</p>
+
       <div class="cad-grid">
-        <figure class="cad-video" data-reveal data-float="0.05">
+        <figure class="cad-video" data-reveal data-float="0.04">
           <video id="cad-video" src="media/robot-slider.mp4" poster="media/robot-slider-poster.jpg" width="1280" height="986" muted playsinline preload="auto" aria-label="Fusion 360 motion study of the robot's pneumatic slider folding out the front flap"></video>
+          <button class="replay" id="replay" type="button" hidden>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Replay</span>
+          </button>
         </figure>
-        <figure class="cad-still" data-reveal data-float="0.1" style="--i:1">
+        <figure class="cad-still" data-reveal data-float="0.09" style="--i:1">
           <img src="images/robot-6546c.jpg" width="2000" height="1833" loading="lazy" alt="Fusion 360 render of team 6546C's VEX robot" />
-          <figcaption>I'm the designer on my robotics team. I CAD our robot in Fusion 360 and simulate each mechanism, so we know it works before anything gets built.</figcaption>
         </figure>
       </div>
+
+      <p class="story" data-reveal data-float="0.05">My role on my robotics team, <strong>6546C</strong>, is the designer. I CAD and test robots in Fusion before they're even built.</p>
     </section>
   </main>
   <footer>
@@ -74,22 +88,18 @@
   </footer>
   <script type="module" src="js/site.js?v=__V__"></script>
   <script>
-    // Animated arrow from "That's me!" to the person in the arm sling
-    const grid = document.getElementById("vex-grid"), photo = grid.querySelector(".vex-photo");
-    const label = document.getElementById("thats-me"), svg = document.getElementById("pointer");
-    const path = document.getElementById("pointer-path"), head = document.getElementById("pointer-head");
-    const target = photo.querySelector(".target");
+    // Animated arrow from "That's me!" to Joey, both drawn on top of the photo
+    const photo = document.getElementById("vex-photo"), label = document.getElementById("thats-me");
+    const svg = document.getElementById("pointer"), path = document.getElementById("pointer-path"), head = document.getElementById("pointer-head");
     function drawArrow() {
-      // positions come from layout (offsets), so running animations don't throw the arrow off
-      svg.setAttribute("viewBox", `0 0 ${grid.clientWidth} ${grid.clientHeight}`);
-      const tx = photo.offsetLeft + photo.offsetWidth * 0.724, ty = photo.offsetTop + photo.offsetHeight * 0.86;
-      const lx = label.offsetLeft, ly = label.offsetTop, lw = label.offsetWidth, lh = label.offsetHeight;
-      const stacked = ly > photo.offsetTop + photo.offsetHeight - 1; // phone: label sits under the photo
-      let sx, sy, ex, ey, cx, cy;
-      if (stacked) { sx = lx + lw * 0.5; sy = ly - 10; ex = tx + 6; ey = ty + 24; cx = Math.max(sx, ex) + 50; cy = (sy + ey) / 2; }
-      else { sx = lx - 14; sy = ly + lh * 0.45; ex = tx + 20; ey = ty - 18; cx = (sx + ex) / 2 + 20; cy = Math.min(sy, ey) - 110; }
+      const W = photo.clientWidth, H = photo.clientHeight;
+      svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+      const tx = W * 0.724, ty = H * 0.86, r = Math.max(14, W * 0.014);
+      const sx = label.offsetLeft + label.offsetWidth * 0.62, sy = label.offsetTop + label.offsetHeight + 6;
+      const ex = tx - r * 0.5, ey = ty - r - 6;
+      const cx = sx - W * 0.04, cy = (sy + ey) / 2 + H * 0.02;
       path.setAttribute("d", `M${sx} ${sy} Q${cx} ${cy} ${ex} ${ey}`);
-      const ang = Math.atan2(ey - cy, ex - cx), s = 14;
+      const ang = Math.atan2(ey - cy, ex - cx), s = Math.max(10, W * 0.011);
       head.setAttribute("d", `M${ex - s * Math.cos(ang - 0.5)} ${ey - s * Math.sin(ang - 0.5)} L${ex} ${ey} L${ex - s * Math.cos(ang + 0.5)} ${ey - s * Math.sin(ang + 0.5)}`);
       path.style.setProperty("--len", Math.ceil(path.getTotalLength()) + 2); head.style.setProperty("--len", 40);
     }
@@ -97,12 +107,19 @@
     (img.complete ? Promise.resolve() : new Promise((r) => (img.onload = r))).then(drawArrow);
     document.fonts.ready.then(drawArrow);
     addEventListener("resize", drawArrow);
-    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { drawArrow(); grid.classList.add("play"); o.disconnect(); } }, { threshold: 0.45 }).observe(grid);
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { drawArrow(); photo.classList.add("play"); o.disconnect(); } }, { threshold: 0.5 }).observe(photo);
 
-    // Fusion recording: plays once when it scrolls into view, then rests on its last frame
-    const vid = document.getElementById("cad-video");
-    if (!matchMedia("(prefers-reduced-motion: reduce)").matches)
-      new IntersectionObserver(([e], o) => { if (e.isIntersecting) { vid.play().catch(() => {}); o.disconnect(); } }, { threshold: 0.6 }).observe(vid);
+    // Fusion recording: plays once when it is fully in view, then rests on its last frame.
+    // If the browser blocks autoplay (e.g. Safari Low Power Mode) the button offers Play instead.
+    const vid = document.getElementById("cad-video"), btn = document.getElementById("replay"), btnLabel = btn.querySelector("span");
+    vid.muted = true; vid.defaultMuted = true; vid.playbackRate = 0.75;
+    const start = () => { vid.currentTime = 0; vid.playbackRate = 0.75; btn.hidden = true;
+      vid.play().catch(() => { btnLabel.textContent = "Play"; btn.hidden = false; }); };
+    vid.addEventListener("ended", () => { btnLabel.textContent = "Replay"; btn.hidden = false; });
+    btn.addEventListener("click", start);
+    vid.addEventListener("click", () => { if (vid.paused) start(); });
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { btnLabel.textContent = "Play"; btn.hidden = false; }
+    else new IntersectionObserver(([e], o) => { if (e.intersectionRatio >= 0.85) { o.disconnect(); setTimeout(start, 350); } }, { threshold: [0.85] }).observe(vid);
   </script>
 </body>
 </html>
