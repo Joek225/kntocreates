@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/style.css?v=__V__" />
   <script type="importmap">
     { "imports": {
       "three": "./vendor/three/three.module.js",
@@ -44,11 +44,11 @@
       <span class="links"><a href="#" data-social="instagram">Instagram</a><a href="#" data-social="youtube">YouTube</a></span>
     </div>
   </footer>
-  <script type="module" src="js/site.js"></script>
+  <script type="module" src="js/site.js?v=__V__"></script>
   <script type="module">
-    import { DESIGNS } from "./js/designs.js";
-    import { renderThumb } from "./js/viewer.js";
-    import { reveal } from "./js/site.js";
+    import { DESIGNS } from "./js/designs.js?v=__V__";
+    import { renderThumb } from "./js/viewer.js?v=__V__";
+    import { reveal } from "./js/site.js?v=__V__";
     const list = document.getElementById("index");
     if (!DESIGNS.length) list.outerHTML = '<p class="lede">Designs coming soon.</p>';
     DESIGNS.forEach((d, i) => {

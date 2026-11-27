@@ -1,5 +1,5 @@
-import "./sky.js";
-import { track } from "./motion.js";
+import "./sky.js?v=__V__";
+import { track } from "./motion.js?v=__V__";
 // Your channel links: paste them here and every Instagram / YouTube link on the site updates.
 const SOCIAL = {
   instagram: "https://instagram.com/",
