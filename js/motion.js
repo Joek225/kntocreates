@@ -14,7 +14,7 @@ export function track(root = document) {
   if (reduce) return;
   root.querySelectorAll("[data-float]").forEach((el, i) => {
     if (items.has(el)) return;
-    const it = { speed: parseFloat(el.dataset.float) || 0.06, rate: 7 + ((i * 37) % 5), sy: scrollY, off: 0, fade: "fade" in el.dataset };
+    const it = { speed: parseFloat(el.dataset.float) || 0.06, rate: 10 + ((i * 37) % 3), sy: scrollY, off: 0, fade: "fade" in el.dataset };
     items.set(el, it); measure(el, it);
   });
   kick();
@@ -33,7 +33,7 @@ function tick(now) {
   for (const [el, it] of items) {
     it.sy += (y - it.sy) * (1 - Math.exp(-it.rate * dt));
     if (Math.abs(y - it.sy) > 0.15) moving = true; else it.sy = y;
-    const lag = Math.max(-70, Math.min(70, (y - it.sy) * 0.22));
+    const lag = Math.max(-24, Math.min(24, (y - it.sy) * 0.08));
     const screenCenter = it.center - it.sy;
     if (screenCenter < -vh || screenCenter > vh * 2) continue; // off screen
     const para = (screenCenter - mid) * it.speed;

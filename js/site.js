@@ -1,4 +1,5 @@
 import "./sky.js?v=__V__";
+import "./smoothwheel.js?v=__V__";
 import { track } from "./motion.js?v=__V__";
 // Your channel links: paste them here and every Instagram / YouTube link on the site updates.
 const SOCIAL = {
