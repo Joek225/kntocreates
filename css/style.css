@@ -174,3 +174,52 @@ footer .links { display: flex; gap: 20px; }
   *, *::before, *::after { animation-duration: 1ms !important; animation-delay: 0ms !important; transition-duration: 1ms !important; scroll-behavior: auto !important; }
   .js [data-reveal] { opacity: 1; transform: none; }
 }
+
+/* ---- About: photo + intro, then VEX ---- */
+.about-hero { min-height: calc(100svh - 60px); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 80px); align-items: center; padding-top: 32px; padding-bottom: 48px; }
+.me { margin: 0; border-radius: 20px; overflow: hidden; max-height: calc(100svh - 140px); aspect-ratio: 723 / 1086; justify-self: start; width: 100%; box-shadow: 0 30px 80px rgba(5, 6, 30, 0.55); }
+.me img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); animation: settle 1300ms var(--ease-out) 120ms forwards; }
+@keyframes settle { to { opacity: 1; transform: none; } }
+.about-hero .big { font-size: clamp(44px, 7.2vw, 124px); }
+.about-hero .big .accent { color: var(--accent); }
+.scroll-more { display: inline-flex; align-items: center; gap: 10px; margin-top: 40px; color: var(--muted); text-decoration: none; font-size: 18px; font-weight: 500; transition: color 160ms ease; }
+.scroll-more:hover { color: var(--text); }
+.scroll-more svg { animation: bob 1.8s var(--ease-out) infinite; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(6px); } }
+
+.vex { padding-top: 120px; padding-bottom: 140px; }
+.vex h2 { font-size: clamp(44px, 7vw, 96px); letter-spacing: -0.04em; line-height: 1; margin: 0 0 40px; }
+.vex-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.vex-photo { position: relative; margin: 0; border-radius: 20px; overflow: hidden; box-shadow: 0 30px 80px rgba(5, 6, 30, 0.55); clip-path: inset(0 100% 0 0 round 20px); transition: clip-path 1200ms var(--ease-out); }
+.vex-photo img { width: 100%; height: auto; transform: scale(1.12); transition: transform 1800ms var(--ease-out); }
+.vex-grid.play .vex-photo { clip-path: inset(0 0 0 0 round 20px); }
+.vex-grid.play .vex-photo img { transform: scale(1); }
+.target { position: absolute; left: var(--x); top: var(--y); width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; border: 2.5px solid var(--sky); box-shadow: 0 0 0 4px rgba(127, 211, 255, 0.18), 0 0 24px rgba(127, 211, 255, 0.6); opacity: 0; transform: scale(2.2); transition: opacity 400ms ease 1900ms, transform 600ms var(--ease-out) 1900ms; }
+.vex-grid.play .target { opacity: 1; transform: none; animation: ping 1.8s ease-out 2.6s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 rgba(127, 211, 255, 0.55), 0 0 24px rgba(127, 211, 255, 0.6); } 100% { box-shadow: 0 0 0 18px rgba(127, 211, 255, 0), 0 0 24px rgba(127, 211, 255, 0.6); } }
+.thats-me { margin: 0; font-size: clamp(34px, 4vw, 56px); font-weight: 700; letter-spacing: -0.03em; color: var(--sky); justify-self: start; align-self: end; margin-bottom: 18%; opacity: 0; transform: translateY(14px) rotate(-4deg); transition: opacity 600ms var(--ease-out) 1100ms, transform 700ms var(--ease-out) 1100ms; }
+.vex-grid.play .thats-me { opacity: 1; transform: rotate(-4deg); }
+.pointer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.pointer path { fill: none; stroke: var(--sky); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: var(--len, 600); stroke-dashoffset: var(--len, 600); filter: drop-shadow(0 0 6px rgba(127, 211, 255, 0.5)); }
+.vex-grid.play #pointer-path { transition: stroke-dashoffset 900ms cubic-bezier(0.65, 0, 0.35, 1) 1300ms; stroke-dashoffset: 0; }
+.vex-grid.play #pointer-head { transition: stroke-dashoffset 250ms ease-out 2150ms; stroke-dashoffset: 0; }
+
+@media (max-width: 900px) {
+  .about-hero { grid-template-columns: 1fr; align-items: start; padding-top: 24px; gap: 28px; }
+  .me { max-height: 62svh; width: auto; height: 62svh; justify-self: center; }
+  .vex { padding-top: 72px; }
+  .vex-grid { grid-template-columns: 1fr; gap: 72px; }
+  .thats-me { justify-self: center; margin-bottom: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vex-photo { clip-path: none; } .vex-photo img { transform: none; }
+  .me img, .thats-me, .target, .pointer path { opacity: 1; transform: none; stroke-dashoffset: 0; }
+}
+
+/* ---- CAD clip + render ---- */
+.cad-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; align-items: start; margin-top: 120px; }
+.cad-grid figure { margin: 0; }
+.cad-video, .cad-still img { border-radius: 20px; overflow: hidden; background: #808080; box-shadow: 0 30px 80px rgba(5, 6, 30, 0.55); }
+.cad-video video, .cad-still img { display: block; width: 100%; height: auto; }
+.cad-still figcaption { margin-top: 22px; font-size: clamp(18px, 1.7vw, 22px); line-height: 1.5; color: var(--text); max-width: 34ch; }
+@media (max-width: 900px) { .cad-grid { grid-template-columns: 1fr; margin-top: 80px; } }
