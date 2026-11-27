@@ -123,7 +123,36 @@
     const vid = document.getElementById("cad-video");
     vid.muted = true; vid.defaultMuted = true;
     vid.addEventListener("loadedmetadata", () => (vid.playbackRate = 0.75));
-    new IntersectionObserver(([e]) => { if (e.isIntersecting) { vid.playbackRate = 0.75; vid.play().catch(() => {}); } else vid.pause(); }).observe(vid);
+    // Some browsers (iPhone Low Power Mode, Firefox/Safari autoplay blocking) refuse to
+    // autoplay video. If that happens, swap in an animated image, which always plays.
+    let swapped = false;
+    const toImage = () => {
+      if (swapped) return; swapped = true;
+      const img = new Image();
+      img.src = "media/robot-slider.webp?v=__V__";
+      img.alt = vid.getAttribute("aria-label");
+      img.width = 1280; img.height = 986;
+      img.style.cssText = "display:block;width:100%;height:auto";
+      vid.replaceWith(img);
+    };
+    const tryPlay = () => {
+      if (swapped) return;
+      vid.playbackRate = 0.75;
+      const p = vid.play();
+      if (p) p.catch(toImage);
+    };
+    vid.addEventListener("error", toImage);
+    new IntersectionObserver(([e]) => { if (e.isIntersecting) tryPlay(); else if (!swapped) vid.pause(); }).observe(vid);
+    // Belt and braces: if it is on screen but still not moving after 2s, swap.
+    setInterval(() => {
+      if (swapped) return;
+      const r = vid.getBoundingClientRect();
+      const onScreen = r.top < innerHeight && r.bottom > 0;
+      if (onScreen && document.visibilityState === "visible") {
+        const t = vid.currentTime;
+        setTimeout(() => { if (!swapped && vid.currentTime === t && vid.readyState >= 2) toImage(); }, 1500);
+      }
+    }, 2500);
   </script>
 </body>
 </html>
